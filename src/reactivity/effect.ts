@@ -4,7 +4,7 @@ import { extend } from "../../shared";
 let activeEffect;
 let shouldTrack;
 
-class ReactiveEffect {
+export class ReactiveEffect {
     private _fn: any
     scheduler: any;
     deps = []
@@ -72,6 +72,11 @@ export function track(target, key) {
         depsMap.set(key, dep)
     }
 
+    trackEffects(dep)
+}
+
+export function trackEffects(dep) {
+    // 去重, 防止重复添加
     if (dep.has(activeEffect)) return
 
     dep.add(activeEffect)
@@ -85,6 +90,10 @@ export function isTracking() {
 export function trigger(target, key) {
     let depsMap = targetMap.get(target)
     let dep = depsMap.get(key)
+    triggerEffects(dep)
+}
+
+export function triggerEffects(dep) {
     for (const effect of dep) {
         if (effect.scheduler) {
             effect.scheduler()
