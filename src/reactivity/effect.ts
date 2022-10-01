@@ -79,8 +79,6 @@ export function track(target, key) {
 }
 
 export function isTracking() {
-    // if (!activeEffect) return;
-    // if (!shouldTrack) return;
     return shouldTrack && activeEffect !== undefined;
 }
 
