@@ -13,6 +13,7 @@ class RefImpl {
     private _value: any;
     dep: Set<unknown>;
     private _rawValue: any;
+    __v_isRef = true
 
     constructor(value) {
         this._rawValue = value
@@ -54,4 +55,13 @@ function trackRefValue(ref) {
 
 export function ref(value) {
     return new RefImpl(value)
+}
+
+export function isRef(ref) {
+    return !!ref.__v_isRef;
+}
+
+export function unRef(ref) {
+    // 看看是不是 ref 对象, ref => ref.value
+    return isRef(ref) ? ref.value : ref;
 }
