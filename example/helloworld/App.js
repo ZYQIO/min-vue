@@ -7,15 +7,13 @@ export const App = {
     render() {
         window.self = this
 
-        return h("div", {}, [h("div", {}, "App"), h(Foo, {
-            onAdd(a, b) {
-                console.log('父级....', a, b);
-            },
-            // add-foo  -->  onAddFoo
-            onAddFoo() {
-                console.log('11111111111');
-            }
-        })])
+        const foo = h(Foo, {}, {
+            header: ({ age }) => h("p", {}, "123 ," + age),
+            footer: () => h("p", {}, "456"),
+        })
+        // const foo = h(Foo, {}, h("p", {}, '123'))
+
+        return h("div", {}, [h("div", {}, "App"), foo])
     },
 
     setup() {

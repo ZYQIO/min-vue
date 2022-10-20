@@ -2,7 +2,8 @@ export enum ShapeFlags {
     ELEMENT = 1, // '01'
     STATEFUL_COMPONENT = 1 << 1, // toString(2); --> '10' 默认十进制转换二进制
     TEXT_CHILDREN = 1 << 2, // '100'
-    ARRAY_CHILDREN = 1 << 3 // '1000'
+    ARRAY_CHILDREN = 1 << 3, // '1000'
+    SLOT_CHILDREN = 1 << 4
 }
 
 // 如果补齐数位, 就是以下的情况
