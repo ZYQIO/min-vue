@@ -10,9 +10,9 @@ export const App = {
             id: "root",
             class: ["red", "hard"]
         },
-            'hi ' + this.msg
+            // 'hi ' + this.msg
             // 'hi, min-vue'
-            // [h('p', { class: "red" }, 'hi'), h('p', { class: 'blue' }, 'text...')]
+            [h('p', { class: "red" }, 'hi'), h('p', { class: 'blue' }, 'text...')]
         )
     },
 
