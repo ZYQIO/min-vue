@@ -1,20 +1,14 @@
-import { h, renderSlots } from '../../lib/guide-mini-vue.esm.js'
+import { h, getCurrentInstance } from '../../lib/guide-mini-vue.esm.js'
 
-window.self = null
 export const Foo = {
     name: 'Foo',
-    setup() { },
-    render() {
-        const foo = h("p", {}, "foo")
-        console.log('this.$slots', this.$slots);
+    setup() {
+        const instance = getCurrentInstance()
+        console.log('foo: ', instance);
 
-        const age = 18
-        return h('div', {}, [
-            renderSlots(this.$slots, 'header', {
-                age
-            }),
-            foo,
-            renderSlots(this.$slots, 'footer')
-        ])
+        return {}
+    },
+    render() {
+        return h("div", {}, "foo")
     }
 }

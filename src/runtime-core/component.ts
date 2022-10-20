@@ -47,10 +47,13 @@ function setupStatefulComponent(instance) {
     const { setup } = Component;
 
     if (setup) {
+        serCurrentInstance(instance)
         // setup 可以返回一个 fn, 也可以返回一个 object
         const setupResult = setup(shallowReadonly(instance.props), {
             emit: instance.emit
         })
+
+        serCurrentInstance(null)
 
         handleSetupResult(instance, setupResult)
     }
@@ -76,5 +79,14 @@ function finishComponentSetup(instance) {
     if (Component.render) {
         instance.render = Component.render
     }
+}
+
+let currentInstance = null
+export function getCurrentInstance() {
+    return currentInstance;
+}
+
+export function serCurrentInstance(instance) {
+    currentInstance = instance;
 }
 
