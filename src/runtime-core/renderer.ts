@@ -12,7 +12,7 @@ function patch(vnode, container) {
     // TODO 判断 vnode 是不是一个 element 
     // 是 element 那么就应该处理 element
     // 思考题: 如何去区分是 element 类型 还是 component 类型 ?
-    console.log(vnode.type);
+    // console.log(vnode.type);
     // 改造前
     // if (typeof vnode.type === 'string') {
     //     processelement(vnode, container)
@@ -57,7 +57,7 @@ function mountElement(vnode: any, container: any) {
 
     // props
     for (const key in props) {
-        console.log('key', key);
+        // console.log('key', key);
 
         const val = props[key]
         // 具体的 click --> 重构成通用的

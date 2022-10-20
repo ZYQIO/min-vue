@@ -7,22 +7,15 @@ export const App = {
     render() {
         window.self = this
 
-        return h('div',
-            {
-                id: "root",
-                class: ["red", "hard"],
-                onClick() {
-                    console.log('click');
-                },
-                onMousedown() {
-                    console.log('mousedown');
-                }
+        return h("div", {}, [h("div", {}, "App"), h(Foo, {
+            onAdd(a, b) {
+                console.log('父级....', a, b);
             },
-            [h('div', {}, 'hi, ' + this.msg), h(Foo, { count: 1 })]
-            // 'hi ' + this.msg
-            // 'hi, min-vue'
-            // [h('p', { class: "red" }, 'hi'), h('p', { class: 'blue' }, 'text...')]
-        )
+            // add-foo  -->  onAddFoo
+            onAddFoo() {
+                console.log('11111111111');
+            }
+        })])
     },
 
     setup() {
