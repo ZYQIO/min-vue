@@ -1,6 +1,7 @@
 import { isObject } from "../shared/index";
 import { ShapeFlags } from "../shared/ShapeFlags";
 import { createComponentInstance, setupComponent } from "./component"
+import { Fragment, Text } from "./vnode";
 
 export function render(vnode, container) {
     // 去调用 patch 方法
@@ -20,13 +21,38 @@ function patch(vnode, container) {
     //     processComponent(vnode, container)
     // }
 
-    const { shapeFlag } = vnode
-    // 改造后
-    if (shapeFlag & ShapeFlags.ELEMENT) {
-        processelement(vnode, container)
-    } else if (shapeFlag & ShapeFlags.STATEFUL_COMPONENT) {
-        processComponent(vnode, container)
+    const { type, shapeFlag } = vnode
+
+    // Fragment --> 只需要渲染 children 内容
+    switch (type) {
+        case Fragment:
+            processFragment(vnode, container)
+            break;
+
+        case Text:
+            processText(vnode, container)
+            break;
+
+        default:
+            // 改造后
+            if (shapeFlag & ShapeFlags.ELEMENT) {
+                processelement(vnode, container)
+            } else if (shapeFlag & ShapeFlags.STATEFUL_COMPONENT) {
+                processComponent(vnode, container)
+            }
+            break;
     }
+
+}
+
+function processText(vnode, container) {
+    const { children } = vnode
+    const textNode = vnode.el = document.createTextNode(children)
+    container.appendChild(textNode)
+}
+
+function processFragment(vnode, container) {
+    mountChildren(vnode, container)
 }
 
 function processelement(vnode: any, container: any) {
