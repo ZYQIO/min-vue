@@ -6,7 +6,7 @@ import { Fragment, Text } from "./vnode";
 
 export function createRenderer(options) {
 
-    const { createElement: hostCreateElement, hostPatchProp, hostInsert } = options
+    const { createElement: hostCreateElement, patchProp: hostPatchProp,insert: hostInsert } = options
 
     function render(vnode, container) {
         // 去调用 patch 方法
