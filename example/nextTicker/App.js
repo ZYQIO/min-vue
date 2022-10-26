@@ -1,9 +1,13 @@
-import { h, ref, getCurrentInstance, nextTick } from '../../lib/guide-mini-vue.esm.js'
+import { h, ref, reactive, getCurrentInstance, nextTick } from '../../lib/guide-mini-vue.esm.js'
 
 export const App = {
     name: 'App',
     setup() {
         const count = ref(1)
+        const info = reactive({
+            foo: 'foo',
+            bar: 'bar'
+        })
         const instance = getCurrentInstance()
 
         nextTick(() => {
@@ -18,12 +22,14 @@ export const App = {
 
         return {
             count,
+            info,
             onClick
         }
     },
     render() {
+        console.log(this.info);
         const button = h('button', { onClick: this.onClick }, "update")
         const p = h('p', {}, "count: " + this.count)
-        return h("div", {}, [button, p])
+        return h("div", {}, [button, p, h("div", {}, this.info.bar)])
     }
 }
