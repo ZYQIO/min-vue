@@ -20,9 +20,9 @@ describe('Parse', () => {
     })
 
     describe('element', () => {
-        test('simple element div', () => {
+        it('simple element div', () => {
             const ast: any = baseParse("<div></div>")
-
+            
             // root
             expect(ast.children[0]).toStrictEqual({
                 type: NodeTypes.ELEMENT,

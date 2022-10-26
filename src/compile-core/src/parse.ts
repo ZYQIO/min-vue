@@ -19,7 +19,7 @@ function parseChildren(context) {
         node = parseInterpolation(context)
     } else if (s[0] === "<") {
         if (/[a-z]/i.test(s[1])) {
-            parseElement(context)
+            node = parseElement(context)
         }
     }
 
