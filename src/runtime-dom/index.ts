@@ -1,10 +1,10 @@
 import { createRenderer } from '../runtime-core'
 
-export function createElement(type) {
+function createElement(type) {
     return document.createElement(type)
 }
 
-export function patchProp(el, key, preVal, nextVal) {
+function patchProp(el, key, preVal, nextVal) {
     const isOn = (key: string) => /^on[A-Z]/.test(key)
 
     if (isOn(key)) {
@@ -21,14 +21,27 @@ export function patchProp(el, key, preVal, nextVal) {
     }
 }
 
-export function insert(el, container) {
+function insert(el, container) {
     container.appendChild(el)
+}
+
+function remove(child) {
+    const parent = child.parentNode;
+    if (parent) {
+        parent.removeChild(child)
+    }
+}
+
+function setElementText(el, text) {
+    el.textContent = text;
 }
 
 const renderer: any = createRenderer({
     createElement,
     patchProp,
-    insert
+    insert,
+    remove,
+    setElementText
 })
 
 export function createApp(...args) {
