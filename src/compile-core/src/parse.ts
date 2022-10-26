@@ -23,10 +23,35 @@ function parseChildren(context) {
         }
     }
 
+    if (!node) {
+        node = parseText(context)
+    }
+
     nodes.push(node)
 
     return nodes;
 }
+
+function parseText(context: any) {
+    const content = parseTextData(context, context.source.length)
+
+    console.log(content)
+
+    return {
+        type: NodeTypes.TEXT,
+        content
+    }
+}
+
+function parseTextData(context, length) {
+    // 1. 获取 content
+    const content = context.source.slice(0, length)
+    // 2. 推进
+    advanceBy(context, length)
+
+    return content;
+}
+
 
 function parseElement(context) {
     // 1. 解析 tag
@@ -71,7 +96,8 @@ function parseInterpolation(context) {
 
     const rawContentLength = closeIndex - opendDelomiter.length;
 
-    const rawContent = context.source.slice(0, rawContentLength);
+    // const rawContent = context.source.slice(0, rawContentLength);
+    const rawContent = parseTextData(context, rawContentLength)
     const content = rawContent.trim()
     // console.log(content)
 

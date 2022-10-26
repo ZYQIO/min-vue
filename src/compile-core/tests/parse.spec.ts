@@ -22,11 +22,23 @@ describe('Parse', () => {
     describe('element', () => {
         it('simple element div', () => {
             const ast: any = baseParse("<div></div>")
-            
+
             // root
             expect(ast.children[0]).toStrictEqual({
                 type: NodeTypes.ELEMENT,
                 tag: "div"
+            })
+        })
+    })
+
+    describe("text", () => {
+        it('simple text', () => {
+            const ast: any = baseParse("some text")
+
+            // root
+            expect(ast.children[0]).toStrictEqual({
+                type: NodeTypes.TEXT,
+                content: "some text"
             })
         })
     })
