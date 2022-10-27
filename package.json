@@ -6,7 +6,7 @@
   "module": "lib/guide-mini-vue.esm.js",
   "type": "module",
   "scripts": {
-    "test": "jest --watch",
+    "test": "jest codegen.spec.ts",
     "build": "rollup -c rollup.config.js"
   },
   "keywords": [],
