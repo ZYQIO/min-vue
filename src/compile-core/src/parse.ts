@@ -7,35 +7,72 @@ const enum TagType {
 
 export function baseParse(content: string) {
     const context = createParserContext(content)
-    return createRoot(parseChildren(context))
+    return createRoot(parseChildren(context, []))
 }
 
-function parseChildren(context) {
+function parseChildren(context, ancestors) {
     const nodes: any[] = []
 
-    let node: any;
-    const s = context.source;
-    if (s.startsWith("{{")) {
-        node = parseInterpolation(context)
-    } else if (s[0] === "<") {
-        if (/[a-z]/i.test(s[1])) {
-            node = parseElement(context)
+    while (!isEnd(context, ancestors)) {
+
+        let node: any;
+        const s = context.source;
+        if (s.startsWith("{{")) {
+            node = parseInterpolation(context)
+        } else if (s[0] === "<") {
+            if (/[a-z]/i.test(s[1])) {
+                node = parseElement(context, ancestors)
+            }
         }
+
+        if (!node) {
+            node = parseText(context)
+        }
+
+        nodes.push(node)
+
     }
 
-    if (!node) {
-        node = parseText(context)
-    }
-
-    nodes.push(node)
+    console.log(nodes)
 
     return nodes;
 }
 
-function parseText(context: any) {
-    const content = parseTextData(context, context.source.length)
+function isEnd(context, ancestors) {
+    // 2. 当遇到结束的时候
+    const s = context.source;
+    // </div>
+    if (s.startsWith("</")) {
+        for (let i = ancestors.length - 1; i >= 0; i--) {
+            const tag = ancestors[i].tag;
+            if (startWithEndTagOpen(s, tag)) {
+                return true;
+            }
+        }
+    }
 
-    console.log(content)
+    // if (paremtTag && s.startsWith(`<${paremtTag}>`)) {
+    //     return true;
+    // }
+
+    // // 1. source 有值的时候
+    return !s;
+}
+
+function parseText(context: any) {
+    let endIndex = context.source.length;
+    let endToken = ["<", "{{"]
+
+    for (let i = 0; i < endToken.length; i++) {
+        let index = context.source.indexOf(endToken[i]);
+        if (index !== -1 && endIndex > index) {
+            endIndex = index;
+        }
+
+    }
+
+    // 获取content
+    const content = parseTextData(context, endIndex)
 
     return {
         type: NodeTypes.TEXT,
@@ -53,15 +90,27 @@ function parseTextData(context, length) {
 }
 
 
-function parseElement(context) {
+function parseElement(context, ancestors) {
     // 1. 解析 tag
-    const element = parseTag(context, TagType.Start)
+    const element: any = parseTag(context, TagType.Start)
 
-    parseTag(context, TagType.End)
+    ancestors.push(element)
+    const children = parseChildren(context, ancestors)
+    ancestors.pop()
 
-    // console.log('--------, ', context)
+    if (startWithEndTagOpen(context.source, element.tag)) {
+        parseTag(context, TagType.End)
+    } else {
+        throw new Error(`缺失结束标签: ${element.tag}`);
+    }
+
+    element.children = children;
 
     return element;
+}
+
+function startWithEndTagOpen(source, tag) {
+    return source.startsWith("</") && source.slice(2, 2 + tag.length).toLowerCase() === tag.toLowerCase();
 }
 
 function parseTag(context: any, type: TagType) {
