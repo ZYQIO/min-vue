@@ -33,15 +33,18 @@ function parseChildren(context, ancestors) {
 
     }
 
-    console.log(nodes)
+    // console.log(nodes)
 
     return nodes;
 }
 
 function isEnd(context, ancestors) {
+    // console.log('ancestors ---------------->', ancestors)
+
     // 2. 当遇到结束的时候
     const s = context.source;
     // </div>
+
     if (s.startsWith("</")) {
         for (let i = ancestors.length - 1; i >= 0; i--) {
             const tag = ancestors[i].tag;
@@ -98,6 +101,10 @@ function parseElement(context, ancestors) {
     const children = parseChildren(context, ancestors)
     ancestors.pop()
 
+    // console.log('1111111------------->', startWithEndTagOpen(context.source, element.tag))
+    // console.log('11111112 ------------> ', context)
+    // console.log('11111113-------------->', element)
+
     if (startWithEndTagOpen(context.source, element.tag)) {
         parseTag(context, TagType.End)
     } else {
@@ -110,6 +117,8 @@ function parseElement(context, ancestors) {
 }
 
 function startWithEndTagOpen(source, tag) {
+    // console.log('source-------> ', source)
+    // console.log('tag-------> ', tag)
     return source.startsWith("</") && source.slice(2, 2 + tag.length).toLowerCase() === tag.toLowerCase();
 }
 
@@ -169,7 +178,8 @@ function advanceBy(context: any, length: number) {
 
 function createRoot(children) {
     return {
-        children
+        children,
+        type: NodeTypes.ROOT
     }
 }
 
